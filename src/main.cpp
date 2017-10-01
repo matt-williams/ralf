@@ -829,8 +829,8 @@ int main(int argc, char**argv)
                                 options.http_port);
     if ((!options.rina_dif_name.empty()) &&
         (!options.rina_appl_name.empty())) {
-      http_stack_sig->bind_rina_socket(options.rina_dif_name,
-                                       options.rina_appl_name);
+      http_stack->bind_rina_socket(options.rina_dif_name,
+                                   options.rina_appl_name);
     }
     http_stack->register_handler("^/ping$", &ping_handler);
     http_stack->register_handler("^/call-id/[^/]*$", &billing_handler);
