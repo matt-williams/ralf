@@ -117,6 +117,8 @@ get_daemon_args()
         [ -z "$ralf_chronos_callback_uri" ] || ralf_chronos_callback_uri_arg="--ralf-chronos-callback-uri=$ralf_chronos_callback_uri"
         [ -z "$ralf_hostname" ] || ralf_hostname_arg="--ralf-hostname=$ralf_hostname"
         [ -z "$http_acr_logging" ] || http_acr_logging_arg="--http-acr-logging"
+        [ -z "$ralf_rina_dif_name" ] || rina_dif_name_arg="--rina-dif-name=$homestead_rina_dif_name"
+        [ -z "$ralf_rina_appl_name" ] || rina_appl_name_arg="--rina-appl-name=$homestead_rina_appl_name"
 
         DAEMON_ARGS="--localhost=$local_ip
                      $local_site_name_arg
@@ -131,6 +133,8 @@ get_daemon_args()
                      $ralf_chronos_callback_uri_arg
                      $ralf_hostname_arg
                      $http_acr_logging_arg
+                     $rina_dif_name_arg
+                     $rina_appl_name_arg
                      $billing_realm_arg
                      $billing_peer_arg
                      $diameter_timeout_ms_arg

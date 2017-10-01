@@ -78,6 +78,7 @@ COMMON_LDFLAGS := -L../usr/lib \
                   -lboost_system \
                   -lboost_filesystem \
                   -lcurl \
+                  ../usr/lib/librina-api.so \
                   -levhtp \
                   -levent \
                   -lfdproto \
