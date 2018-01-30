@@ -63,8 +63,8 @@ enum OptionTypes
   RALF_CHRONOS_CALLBACK_URI,
   RALF_HOSTNAME,
   HTTP_ACR_LOGGING,
-  RINA_DIF_NAME,
-  RINA_APPL_NAME,
+  RINA_HTTP_DIF,
+  RINA_HTTP_LOCAL_APPL,
 };
 
 struct options
@@ -105,8 +105,8 @@ struct options
   std::string ralf_chronos_callback_uri;
   std::string ralf_hostname;
   bool http_acr_logging;
-  std::string rina_dif_name;
-  std::string rina_appl_name;
+  std::string rina_http_dif;
+  std::string rina_http_local_appl;
 };
 
 const static struct option long_opt[] =
@@ -144,8 +144,8 @@ const static struct option long_opt[] =
   {"ralf-chronos-callback-uri",   required_argument, NULL, RALF_CHRONOS_CALLBACK_URI},
   {"ralf-hostname",               required_argument, NULL, RALF_HOSTNAME},
   {"http-acr-logging",            required_argument, NULL, HTTP_ACR_LOGGING},
-  {"rina-dif-name",               required_argument, NULL, RINA_DIF_NAME},
-  {"rina-appl-name",              required_argument, NULL, RINA_APPL_NAME},
+  {"rina-http-dif",               required_argument, NULL, RINA_HTTP_DIF},
+  {"rina-http-local-appl",        required_argument, NULL, RINA_HTTP_LOCAL_APPL},
   {NULL,                          0,                 NULL, 0},
 };
 
@@ -218,8 +218,8 @@ void usage(void)
        "                            This is used to form the callback URL for the Chronos cluser.\n"
        "     --http-acr-logging     Whether to include the bodies of ACR HTTP requests when they are logged\n"
        "                            to SAS\n"
-       "     --rina-dif-name        RINA DIF name to listen on\n"
-       "     --rina-appl-name       RINA application name to present\n"
+       "     --rina-http-dif        RINA DIF name to listen for HTTP on\n"
+       "     --rina-http-local-appl RINA application name to present over HTTP\n"
        "     --pidfile=<filename>   Write pidfile\n"
        "     --daemon               Run as a daemon\n"
        " -h, --help                 Show this help screen\n"
@@ -472,12 +472,12 @@ int init_options(int argc, char**argv, struct options& options)
       options.http_acr_logging = true;
       break;
 
-    case RINA_DIF_NAME:
-      options.rina_dif_name = std::string(optarg);
+    case RINA_HTTP_DIF:
+      options.rina_http_dif = std::string(optarg);
       break;
 
-    case RINA_APPL_NAME:
-      options.rina_appl_name = std::string(optarg);
+    case RINA_HTTP_LOCAL_APPL:
+      options.rina_http_local_appl = std::string(optarg);
       break;
 
     default:
@@ -574,8 +574,8 @@ int main(int argc, char**argv)
   options.pidfile = "";
   options.daemon = false;
   options.sas_signaling_if = false;
-  options.rina_dif_name = "";
-  options.rina_appl_name = "";
+  options.rina_http_dif = "";
+  options.rina_http_local_appl = "";
 
   if (init_logging_options(argc, argv, options) != 0)
   {
@@ -848,10 +848,10 @@ int main(int argc, char**argv)
     http_stack->initialize();
     http_stack->bind_tcp_socket(options.http_address,
                                 options.http_port);
-    if ((!options.rina_dif_name.empty()) &&
-        (!options.rina_appl_name.empty())) {
-      http_stack->bind_rina_socket(options.rina_dif_name,
-                                   options.rina_appl_name);
+    if ((!options.rina_http_dif.empty()) &&
+        (!options.rina_http_local_appl.empty())) {
+      http_stack->bind_rina_socket(options.rina_http_dif,
+                                   options.rina_http_local_appl);
     }
     http_stack->register_handler("^/ping$", &ping_handler);
     http_stack->register_handler("^/call-id/[^/]*$", &billing_handler);
